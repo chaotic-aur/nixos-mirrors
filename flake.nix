@@ -7,7 +7,9 @@
     disko.url = "github:nix-community/disko";
     disko.inputs.nixpkgs.follows = "nixpkgs";
 
-    # nixos-facter-modules.url = "github:numtide/nixos-facter-modules";
+    impermanence.url = "github:nix-community/impermanence";
+    impermanence.inputs.nixpkgs.follows = "";
+    impermanence.inputs.home-manager.follows = "";
 
     # SSH keys
     keys_tne.url = "https://github.com/justtne.keys";
@@ -30,6 +32,7 @@
         };
         modules = [
           inputs.disko.nixosModules.disko
+          inputs.impermanence.nixosModules.impermanence
           ./mirror.nix
           ({ config, pkgs, ... }: {
             imports = [ ./configuration.nix ];
@@ -51,7 +54,7 @@
     in
     {
       nixosConfigurations = {
-        testing = makemirror "25.11" "x86_64-linux" "test-mirror-1.silky.network" "testing" "/dev/vda" ./facter/testing.json;
+        testing = makemirror "25.11" "x86_64-linux" "test-mirror.silky.network" "testing" "/dev/vda" ./facter/testing.json;
       };
     };
 }

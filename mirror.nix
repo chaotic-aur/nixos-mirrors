@@ -36,14 +36,28 @@ in
       path = with pkgs; [ git bashNonInteractive docker ];
       serviceConfig = {
         Type = "oneshot";
+        ExecStartPre= pkgs.writeShellScript "dns-wait" ''
+          set -euo pipefail
+
+          for i in {1..6}; do
+              if host github.com; then
+                  exit 0
+              fi
+              echo "Waiting for network..."
+              sleep 5
+          done
+
+          echo "Timed out waiting for network"
+          exit 1
+        '';
         ExecStart = pkgs.writeShellScript "run-mirror" ''
           set -euo pipefail
 
-          if [ ! -d /opt/chaotic-mirror ]; then
-              git clone https://github.com/chaotic-aur/docker-mirror /opt/chaotic-mirror
+          if [ ! -d /data/chaotic-mirror/.git ]; then
+              git clone https://github.com/chaotic-aur/docker-mirror /data/chaotic-mirror
           fi
 
-          cd /opt/chaotic-mirror
+          cd /data/chaotic-mirror
 
           cp "${mirrorconfig}" .env
 

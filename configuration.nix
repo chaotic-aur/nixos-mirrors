@@ -74,4 +74,37 @@ in
 
   # Statistics
   services.vnstat.enable = true;
+
+  # Persistence
+  services.openssh = {
+    hostKeys = [
+      {
+        type = "ed25519";
+        path = "/data/persistent/etc/ssh/ssh_host_ed25519_key";
+      }
+      {
+        type = "rsa";
+        bits = 4096;
+        path = "/data/persistent/etc/ssh/ssh_host_rsa_key";
+      }
+    ];
+  };
+
+  environment.persistence."/data/persistent" = {
+    enable = true;
+    hideMounts = true;
+    directories = [
+      "/var/lib/nixos"
+      "/var/lib/vnstat"
+      "/var/log"
+      "/var/lib/docker"
+    ];
+    files = [
+      "/etc/machine-id"
+    ];
+  };
+
+  security.sudo.extraConfig = ''
+    Defaults lecture = never
+  '';
 }

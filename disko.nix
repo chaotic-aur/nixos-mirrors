@@ -21,16 +21,37 @@
               mountpoint = "/boot";
             };
           };
-          root = {
+          data = {
             size = "100%";
             content = {
               type = "filesystem";
               format = "ext4";
-              mountpoint = "/";
+              mountpoint = "/data";
+              postMountHook = "mkdir -p /mnt/data/nix";
             };
           };
         };
       };
     };
+    nodev = {
+      "/" = {
+        fsType = "tmpfs";
+        mountOptions = [
+          "size=50%"
+          "defaults"
+          "mode=755"
+        ];
+      };
+      "/nix" = {
+        device = "/data/nix";
+        fsType = "none";
+        mountOptions = [
+          "bind"
+        ];
+      };
+    };
   };
+
+  fileSystems."/data".neededForBoot = true;
+  fileSystems."/nix".depends = [ "/data" ];
 }
