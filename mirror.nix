@@ -33,7 +33,7 @@ in
       after = [ "network-online.target" "docker.service" ];
       wants = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
-      path = with pkgs; [ git bashNonInteractive docker ];
+      path = with pkgs; [ git bashNonInteractive docker host ];
       serviceConfig = {
         Type = "oneshot";
         ExecStartPre= pkgs.writeShellScript "dns-wait" ''

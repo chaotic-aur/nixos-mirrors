@@ -30,6 +30,19 @@ in
     flake = flake;
   };
 
+  nix = {
+    settings = {
+      # Allow using flakes
+      experimental-features = [
+        "nix-command"
+        "flakes"
+      ];
+      auto-optimise-store = true;
+    };
+    nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
+  };
+
+
   # Users
   users.mutableUsers = false;
   users.users.mirror-admin = {
