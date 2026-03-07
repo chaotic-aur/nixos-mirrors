@@ -42,6 +42,12 @@ in
     ];
   };
 
+  users.users.root.openssh.authorizedKeys.keyFiles = [
+    inputs.keys_tne
+    inputs.keys_nico
+    inputs.keys_a0xz
+  ];
+
   # Sudo configuration
   security.sudo.extraRules = [
     {
