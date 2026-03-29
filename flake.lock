@@ -98,7 +98,24 @@
         "keys_a0xz": "keys_a0xz",
         "keys_nico": "keys_nico",
         "keys_tne": "keys_tne",
-        "nixpkgs": "nixpkgs"
+        "nixpkgs": "nixpkgs",
+        "syncthing-nixpkgs": "syncthing-nixpkgs"
+      }
+    },
+    "syncthing-nixpkgs": {
+      "locked": {
+        "lastModified": 1773821835,
+        "narHash": "sha256-TJ3lSQtW0E2JrznGVm8hOQGVpXjJyXY2guAxku2O9A4=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "b40629efe5d6ec48dd1efba650c797ddbd39ace0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "b40629efe5d6ec48dd1efba650c797ddbd39ace0",
+        "type": "github"
       }
     }
   },

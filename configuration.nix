@@ -1,4 +1,4 @@
-{ inputs, ... }:
+{ inputs, pkgs, ... }:
 let
   flake = "github:chaotic-aur/nixos-mirrors";
 in
@@ -42,12 +42,19 @@ in
     nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
   };
 
+  environment.systemPackages = with pkgs; [
+    btop
+    vnstat
+  ];
 
   # Users
   users.mutableUsers = false;
   users.users.mirror-admin = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "docker" ];
+    extraGroups = [
+      "wheel"
+      "docker"
+    ];
     openssh.authorizedKeys.keyFiles = [
       inputs.keys_tne
       inputs.keys_nico

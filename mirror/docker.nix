@@ -9,23 +9,7 @@ let
   '';
 in
 {
-  options.chaotic.mirror = {
-    enable = mkOption {
-      type = types.bool;
-      default = false;
-      description = "Whether to enable the chaotic-aur mirror.";
-    };
-    fqdn = mkOption {
-      type = types.str;
-      description = "The fully qualified domain name of the mirror.";
-    };
-    email = mkOption {
-      type = types.str;
-      description = "The email address of the mirror administrator. Used for letsencrypt certificate registration.";
-    };
-  };
-
-  config = mkIf cfg.enable {
+  config = mkIf (cfg.enable && !cfg.native) {
     virtualisation.docker.enable = true;
 
     systemd.services.chaotic-mirror = {
@@ -36,15 +20,15 @@ in
       path = with pkgs; [ git bashNonInteractive docker host ];
       serviceConfig = {
         Type = "oneshot";
-        ExecStartPre= pkgs.writeShellScript "dns-wait" ''
+        ExecStartPre = pkgs.writeShellScript "dns-wait" ''
           set -euo pipefail
 
           for i in {1..6}; do
-              if host github.com; then
-                  exit 0
-              fi
-              echo "Waiting for network..."
-              sleep 5
+            if host github.com; then
+              exit 0
+            fi
+            echo "Waiting for network..."
+            sleep 5
           done
 
           echo "Timed out waiting for network"
@@ -54,7 +38,7 @@ in
           set -euo pipefail
 
           if [ ! -d /data/chaotic-mirror/.git ]; then
-              git clone https://github.com/chaotic-aur/docker-mirror /data/chaotic-mirror
+            git clone https://github.com/chaotic-aur/docker-mirror /data/chaotic-mirror
           fi
 
           cd /data/chaotic-mirror

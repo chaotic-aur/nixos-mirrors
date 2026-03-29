@@ -18,6 +18,9 @@
     keys_nico.flake = false;
     keys_a0xz.url = "https://github.com/a0xz.keys";
     keys_a0xz.flake = false;
+
+    # Workarounds
+    syncthing-nixpkgs.url = "github:NixOS/nixpkgs/b40629efe5d6ec48dd1efba650c797ddbd39ace0";
   };
 
   outputs = inputs:
@@ -33,12 +36,13 @@
         modules = [
           inputs.disko.nixosModules.disko
           inputs.impermanence.nixosModules.impermanence
-          ./mirror.nix
+          ./mirror
           ({ config, pkgs, ... }: {
             imports = [ ./configuration.nix ];
 
             chaotic.mirror = {
               enable = true;
+              native = true;
               fqdn = fqdn;
               email = admin;
             };
