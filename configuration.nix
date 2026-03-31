@@ -1,4 +1,4 @@
-{ inputs, ... }:
+{ inputs, pkgs, ... }:
 let
   flake = "github:chaotic-aur/nixos-mirrors";
 in
@@ -87,6 +87,11 @@ in
 
   # Statistics
   services.vnstat.enable = true;
+
+  # Software
+  environment.systemPackages = with pkgs; [
+    fastfetch
+  ];
 
   # Persistence
   services.openssh = {

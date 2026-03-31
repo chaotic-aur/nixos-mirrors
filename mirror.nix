@@ -36,7 +36,7 @@ in
       path = with pkgs; [ git bashNonInteractive docker host ];
       serviceConfig = {
         Type = "oneshot";
-        ExecStartPre= pkgs.writeShellScript "dns-wait" ''
+        ExecStartPre = pkgs.writeShellScript "dns-wait" ''
           set -euo pipefail
 
           for i in {1..6}; do
