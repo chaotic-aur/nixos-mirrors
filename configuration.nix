@@ -104,6 +104,11 @@ in
     memoryPercent = 90;
   };
 
+  swapDevices = [{
+    device = "/data/swapfile";
+    size = 4 * 1024; # 4GB
+  }];
+
   # Delete swap
   systemd.tmpfiles.rules = [
     "r! /data/swapfile - - - -"
