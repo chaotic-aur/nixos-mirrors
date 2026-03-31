@@ -70,7 +70,7 @@
         "sysfs_bus_id": "0000:00:01.0",
         "detail": {
           "function": 0,
-          "command": 7,
+          "command": 3,
           "header_type": 0,
           "secondary_bus": 0,
           "irq": 0,
@@ -130,7 +130,7 @@
         "sysfs_bus_id": "0000:00:00.0",
         "detail": {
           "function": 0,
-          "command": 7,
+          "command": 3,
           "header_type": 0,
           "secondary_bus": 0,
           "irq": 0,
@@ -198,7 +198,7 @@
         ],
         "detail": {
           "function": 3,
-          "command": 7,
+          "command": 3,
           "header_type": 0,
           "secondary_bus": 0,
           "irq": 9,
@@ -310,6 +310,9 @@
           "arat",
           "npt",
           "nrip_save",
+          "vgif",
+          "overflow_recov",
+          "succor",
           "arch_capabilities"
         ],
         "bugs": [
@@ -324,7 +327,7 @@
           "div0",
           "ibpb_no_ret"
         ],
-        "bogo": 3992.5,
+        "bogo": 3992.49,
         "cache": 512,
         "units": 2,
         "physical_id": 0,
@@ -398,8 +401,8 @@
           "range": 16
         },
         "unix_device_names": [
-          "/dev/disk/by-id/scsi-3605bc580bb114a3898932189a782cc40",
-          "/dev/disk/by-id/wwn-0x605bc580bb114a3898932189a782cc40",
+          "/dev/disk/by-id/scsi-36018c4de8ee5468bb9885b3a434809a5",
+          "/dev/disk/by-id/wwn-0x6018c4de8ee5468bb9885b3a434809a5",
           "/dev/disk/by-path/pci-0000:00:04.0-scsi-0:0:0:1",
           "/dev/sda"
         ],
@@ -650,7 +653,7 @@
           {
             "type": "mem",
             "base": 0,
-            "range": 999727104,
+            "range": 1005711360,
             "enabled": true,
             "access": "read_write",
             "prefetch": "unknown"
@@ -988,29 +991,6 @@
     "network_interface": [
       {
         "index": 21,
-        "attached_to": 0,
-        "class_list": [
-          "network_interface"
-        ],
-        "base_class": {
-          "hex": "0107",
-          "name": "Network Interface",
-          "value": 263
-        },
-        "sub_class": {
-          "hex": "0000",
-          "name": "Loopback",
-          "value": 0
-        },
-        "model": "Loopback network interface",
-        "sysfs_id": "/class/net/lo",
-        "unix_device_name": "lo",
-        "unix_device_names": [
-          "lo"
-        ]
-      },
-      {
-        "index": 22,
         "attached_to": 15,
         "class_list": [
           "network_interface"
@@ -1049,6 +1029,29 @@
         ],
         "driver_modules": [
           "virtio_net"
+        ]
+      },
+      {
+        "index": 22,
+        "attached_to": 0,
+        "class_list": [
+          "network_interface"
+        ],
+        "base_class": {
+          "hex": "0107",
+          "name": "Network Interface",
+          "value": 263
+        },
+        "sub_class": {
+          "hex": "0000",
+          "name": "Loopback",
+          "value": 0
+        },
+        "model": "Loopback network interface",
+        "sysfs_id": "/class/net/lo",
+        "unix_device_name": "lo",
+        "unix_device_names": [
+          "lo"
         ]
       }
     ],
@@ -1542,8 +1545,8 @@
     "bios": {
       "handle": 0,
       "vendor": "EFI Development Kit II / OVMF",
-      "version": "1.5.1",
-      "date": "06/16/2021",
+      "version": "1.6.4",
+      "date": "02/27/2023",
       "features": null,
       "start_address": "0xe8000",
       "rom_size": 65536
@@ -1552,7 +1555,7 @@
       {
         "handle": 768,
         "manufacturer": "QEMU",
-        "version": "pc-i440fx-4.2",
+        "version": "pc-i440fx-7.2",
         "chassis_type": {
           "hex": "0001",
           "name": "Other",
@@ -1654,7 +1657,7 @@
         },
         "socket_populated": true,
         "manufacturer": "QEMU",
-        "version": "pc-i440fx-4.2",
+        "version": "pc-i440fx-7.2",
         "part": "",
         "processor_type": {
           "hex": "0003",
@@ -1682,7 +1685,7 @@
       "handle": 256,
       "manufacturer": "QEMU",
       "product": "Standard PC (i440FX + PIIX, 1996)",
-      "version": "pc-i440fx-4.2",
+      "version": "pc-i440fx-7.2",
       "wake_up": {
         "hex": "0006",
         "name": "Power Switch",

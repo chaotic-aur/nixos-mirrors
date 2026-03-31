@@ -310,9 +310,6 @@
           "arat",
           "npt",
           "nrip_save",
-          "vgif",
-          "overflow_recov",
-          "succor",
           "arch_capabilities"
         ],
         "bugs": [
@@ -327,7 +324,7 @@
           "div0",
           "ibpb_no_ret"
         ],
-        "bogo": 3992.5,
+        "bogo": 3992.49,
         "cache": 512,
         "units": 2,
         "physical_id": 0,
@@ -401,8 +398,8 @@
           "range": 16
         },
         "unix_device_names": [
-          "/dev/disk/by-id/scsi-360edde428dd5479d98a9f8491526ae32",
-          "/dev/disk/by-id/wwn-0x60edde428dd5479d98a9f8491526ae32",
+          "/dev/disk/by-id/scsi-3606d0c8fae35476195622c81e2533ca6",
+          "/dev/disk/by-id/wwn-0x606d0c8fae35476195622c81e2533ca6",
           "/dev/disk/by-path/pci-0000:00:04.0-scsi-0:0:0:1",
           "/dev/sda"
         ],
@@ -653,7 +650,7 @@
           {
             "type": "mem",
             "base": 0,
-            "range": 1005957120,
+            "range": 999727104,
             "enabled": true,
             "access": "read_write",
             "prefetch": "unknown"
@@ -703,20 +700,6 @@
           },
           {
             "type": "monitor",
-            "width": 1280,
-            "height": 800,
-            "vertical_frequency": 60,
-            "interlaced": false
-          },
-          {
-            "type": "monitor",
-            "width": 1600,
-            "height": 1200,
-            "vertical_frequency": 60,
-            "interlaced": false
-          },
-          {
-            "type": "monitor",
             "width": 1920,
             "height": 1080,
             "vertical_frequency": 60,
@@ -746,8 +729,8 @@
           {
             "type": "size",
             "unit": "mm",
-            "value_1": 325,
-            "value_2": 203
+            "value_1": 403,
+            "value_2": 302
           }
         ],
         "detail": {
@@ -762,22 +745,22 @@
             "max": 160
           },
           "horizontal_sync_timings": {
-            "disp": 1280,
-            "sync_start": 1600,
-            "sync_end": 1638,
-            "total": 1728
+            "disp": 1024,
+            "sync_start": 1280,
+            "sync_end": 1310,
+            "total": 1382
           },
           "vertical_sync_timings": {
-            "disp": 800,
-            "sync_start": 804,
-            "sync_end": 808,
-            "total": 828
+            "disp": 768,
+            "sync_start": 771,
+            "sync_end": 774,
+            "total": 794
           },
-          "clock": 107300,
-          "width": 1280,
-          "height": 800,
-          "width_millimetres": 325,
-          "height_millimetres": 203,
+          "clock": 82290,
+          "width": 1024,
+          "height": 768,
+          "width_millimetres": 403,
+          "height_millimetres": 302,
           "horizontal_flag": 45,
           "vertical_flag": 45,
           "vendor": "",
@@ -797,16 +780,16 @@
           },
           "bandwidth": 0,
           "horizontal_sync_timings": {
-            "disp": 1280,
-            "sync_start": 1600,
-            "sync_end": 1638,
-            "total": 1728
+            "disp": 1024,
+            "sync_start": 1280,
+            "sync_end": 1310,
+            "total": 1382
           },
           "vertical_sync_timings": {
-            "disp": 800,
-            "sync_start": 804,
-            "sync_end": 808,
-            "total": 828
+            "disp": 768,
+            "sync_start": 771,
+            "sync_end": 774,
+            "total": 794
           },
           "horizontal_flag": 45,
           "vertical_flag": 45
@@ -1545,8 +1528,8 @@
     "bios": {
       "handle": 0,
       "vendor": "EFI Development Kit II / OVMF",
-      "version": "1.6.4",
-      "date": "02/27/2023",
+      "version": "1.5.1",
+      "date": "06/16/2021",
       "features": null,
       "start_address": "0xe8000",
       "rom_size": 65536
@@ -1555,7 +1538,7 @@
       {
         "handle": 768,
         "manufacturer": "QEMU",
-        "version": "pc-i440fx-7.2",
+        "version": "pc-i440fx-4.2",
         "chassis_type": {
           "hex": "0001",
           "name": "Other",
@@ -1657,7 +1640,7 @@
         },
         "socket_populated": true,
         "manufacturer": "QEMU",
-        "version": "pc-i440fx-7.2",
+        "version": "pc-i440fx-4.2",
         "part": "",
         "processor_type": {
           "hex": "0003",
@@ -1685,7 +1668,7 @@
       "handle": 256,
       "manufacturer": "QEMU",
       "product": "Standard PC (i440FX + PIIX, 1996)",
-      "version": "pc-i440fx-7.2",
+      "version": "pc-i440fx-4.2",
       "wake_up": {
         "hex": "0006",
         "name": "Power Switch",

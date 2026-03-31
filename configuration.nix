@@ -76,6 +76,10 @@ in
     }
   ];
 
+  security.sudo.extraConfig = ''
+    Defaults lecture = never
+  '';
+
   # SSH
   services.openssh.enable = true;
 
@@ -91,6 +95,18 @@ in
   # Software
   environment.systemPackages = with pkgs; [
     fastfetch
+  ];
+
+  # zram/swap
+  zramSwap = {
+    algorithm = "zstd";
+    enable = true;
+    memoryPercent = 90;
+  };
+
+  # Delete swap
+  systemd.tmpfiles.rules = [
+    "r! /data/swapfile - - - -"
   ];
 
   # Persistence
@@ -121,8 +137,4 @@ in
       "/etc/machine-id"
     ];
   };
-
-  security.sudo.extraConfig = ''
-    Defaults lecture = never
-  '';
 }
