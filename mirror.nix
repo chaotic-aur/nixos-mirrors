@@ -23,6 +23,11 @@ in
       type = types.str;
       description = "The email address of the mirror administrator. Used for letsencrypt certificate registration.";
     };
+    stats = mkOption {
+      type = types.bool;
+      default = true;
+      description = "Whether to save vnstat statistics to a file in the http-root.";
+    };
   };
 
   config = mkIf cfg.enable {
@@ -63,6 +68,36 @@ in
 
           ./mirrorctl update
         '';
+      };
+    };
+
+    systemd.services.chaotic-mirror-vnstat = mkIf cfg.stats {
+      description = "Updates the chaotic-aur mirror vnstat statistics in the http-root";
+      path = with pkgs; [ vnstat ];
+      serviceConfig = {
+        Type = "oneshot";
+        RemmainAfterExit = true;
+        ExecStart = pkgs.writeShellScript "update-vnstat" ''
+          set -euo pipefail
+          if [ ! -d "/data/chaotic-mirror/http-root" ]; then
+            echo "http-root does not exist, skipping vnstat stats update"
+            exit 0
+          fi
+
+          vnstat > "/data/chaotic-mirror/http-root/stats.txt"
+          vnstati --scale 500 -L -vs -o "/data/chaotic-mirror/http-root/stats.png"
+        '';
+      };
+    };
+
+    systemd.timers.chaotic-mirror-vnstat = mkIf cfg.stats {
+      wantedBy = [ "timers.target" ];
+      after = [ "chaotic-mirror.service" ];
+      requires = [ "chaotic-mirror.service" ];
+      timerConfig = {
+        Unit = "chaotic-mirror-vnstat.service";
+        OnBootSec = "5m";
+        OnUnitActiveSec = "5m";
       };
     };
   };
