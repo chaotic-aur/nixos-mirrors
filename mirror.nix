@@ -93,7 +93,6 @@ in
     systemd.timers.chaotic-mirror-vnstat = mkIf cfg.stats {
       wantedBy = [ "timers.target" ];
       after = [ "chaotic-mirror.service" ];
-      requires = [ "chaotic-mirror.service" ];
       timerConfig = {
         Unit = "chaotic-mirror-vnstat.service";
         OnBootSec = "5m";
