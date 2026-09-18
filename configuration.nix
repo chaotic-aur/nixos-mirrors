@@ -7,16 +7,24 @@ in
     ./disko.nix
   ];
 
+  boot.kernelPackages = pkgs.linuxPackages_latest;
+
   # Programs for admins
   programs.git.enable = true;
   programs.htop.enable = true;
 
-  # Auto updates
+  # Auto updates: don't reboot all at once
   system.autoUpgrade = {
     enable = true;
     flake = flake;
     upgrade = false;
     allowReboot = true;
+    dates = "daily";
+    randomizedDelaySec = "3h";
+    rebootWindow = {
+      lower = "01:00";
+      upper = "05:00";
+    };
   };
 
   # Auto clean
@@ -96,7 +104,7 @@ in
 
   # Software
   environment.systemPackages = with pkgs; [
-    fastfetchMinimal
+    fastfetch-unwrapped
   ];
 
   # zram/swap
