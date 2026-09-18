@@ -1,8 +1,17 @@
 {
   description = "Automated chaotic-aur mirrors";
 
+  nixConfig = {
+    extra-substituters = [ "https://nyx-cache.chaotic.cx/" ];
+    extra-trusted-public-keys = [
+      "nyx-cache.chaotic.cx:dJxTrgMC3V3cFfyIiBQDQorG6k1LsqurH/srpMSq7qk="
+    ];
+  };
+
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+
+    chaotic.url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
 
     disko.url = "github:nix-community/disko";
     disko.inputs.nixpkgs.follows = "nixpkgs";
@@ -20,10 +29,14 @@
     keys_a0xz.flake = false;
   };
 
-  outputs = inputs:
+  outputs = inputs@{ self, ... }:
     let
       nixpkgs = inputs.nixpkgs;
       admin = "yumi@silky.network";
+
+      inherit (nixpkgs) lib;
+
+      nyxPkgsFor = system: (nixpkgs.legacyPackages.${system}.extend inputs.chaotic.overlays.default);
 
       makemirror = stateVersion: arch: fqdn: hostname: disk: facter: nixpkgs.lib.nixosSystem {
         system = arch;
@@ -51,8 +64,75 @@
           })
         ];
       };
+
+      mkColmenaHive =
+        nodeDeployments:
+        let
+          colmenaSrc = (nyxPkgsFor "x86_64-linux").colmena_git.src;
+           makeHive =
+             rawHive:
+             import "${colmenaSrc}/src/nix/hive/eval.nix" {
+               inherit rawHive;
+               colmenaOptions = import "${colmenaSrc}/src/nix/hive/options.nix";
+               colmenaModules = import "${colmenaSrc}/src/nix/hive/modules.nix";
+               hermetic = true;
+             };
+          mkDefaultDeployment =
+            value:
+            let
+              targetHost =
+                value.config.chaotic.mirror.fqdn or (value.config.networking.hostName or null);
+
+              sshPort =
+                let
+                  sshCfg = value.config.services.openssh or { };
+                  ports = sshCfg.ports or [ 22 ];
+                in
+                if builtins.isList ports then
+                  builtins.head ports
+                else if builtins.isInt ports then
+                  ports
+                else
+                  22;
+            in
+            lib.optionalAttrs (targetHost != null) {
+              inherit targetHost;
+            }
+            // lib.optionalAttrs (sshPort != 22) {
+              targetPort = sshPort;
+            };
+
+           colmenaConf = {
+            meta = {
+              nixpkgs = import nixpkgs { system = "x86_64-linux"; };
+               nodeNixpkgs = builtins.mapAttrs (_name: value: value.pkgs) self.nixosConfigurations;
+               nodeSpecialArgs = builtins.mapAttrs (_name: value: value._module.specialArgs) self.nixosConfigurations;
+             };
+           }
+           // builtins.mapAttrs (nodeName: value: {
+             imports = value._module.args.modules;
+             deployment = lib.recursiveUpdate (mkDefaultDeployment value) (nodeDeployments.${nodeName} or { });
+           }) self.nixosConfigurations;
+         in
+         makeHive colmenaConf;
     in
     {
+      colmenaHive = mkColmenaHive {  };
+
+      devShells = lib.genAttrs [ "x86_64-linux" "aarch64-linux" ] (
+        system:
+        let
+          pkgs = nixpkgs.legacyPackages.${system};
+        in
+        {
+          default = pkgs.mkShell {
+            packages = [
+              inputs.chaotic.legacyPackages.${system}.colmena_git
+            ];
+          };
+        }
+      );
+
       nixosConfigurations = {
         # Big server
         fortaleza-br = makemirror "25.11" "x86_64-linux" "fortaleza-br.silky.network" "fortaleza-br" "/dev/vda" ./facter/fortaleza-br.json;

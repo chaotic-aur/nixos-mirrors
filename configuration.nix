@@ -141,6 +141,7 @@ in
       "/var/lib/vnstat"
       "/var/log"
       "/var/lib/docker"
+      "/var/lib/tailscale"
     ];
     files = [
       "/etc/machine-id"
