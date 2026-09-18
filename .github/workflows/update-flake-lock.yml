@@ -1,0 +1,49 @@
+name: Update flake.lock
+
+on:
+  schedule:
+    - cron: "0 4 * * 1"
+  workflow_dispatch:
+
+jobs:
+  update-lock:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: DeterminateSystems/nix-installer-action@main
+      - uses: DeterminateSystems/magic-nix-cache-action@main
+
+      - name: Update inputs
+        run: nix --accept-flake-config flake update
+
+      - name: Evaluate all hosts
+        run: |
+          HOSTS_JSON=$(nix --accept-flake-config eval --json '.#nixosConfigurations' --apply builtins.attrNames)
+          CHUNK=6
+          COUNT=$(echo "$HOSTS_JSON" | jq length)
+          i=0
+          while [ "$i" -lt "$COUNT" ]; do
+            LIST=$(echo "$HOSTS_JSON" | jq -r ".[$i:$((i + CHUNK))] | \"[\" + (map(\"\\\"\" + . + \"\\\"\") | join(\" \")) + \"]\"")
+            echo "Evaluating hosts $i-$((i + CHUNK - 1)) of $COUNT: $LIST"
+            nix --accept-flake-config eval '.#nixosConfigurations' \
+              --apply "cfgs: map (n: cfgs.\${n}.config.system.build.toplevel.drvPath) $LIST" \
+              --json > /dev/null
+            nix --accept-flake-config eval '.#colmenaHive' \
+              --apply "h: map (n: h.nodes.\${n}.config.deployment.targetHost) $LIST" \
+              --json > /dev/null
+            i=$((i + CHUNK))
+          done
+          nix --accept-flake-config eval '.#devShells' \
+            --apply 's: builtins.mapAttrs (_: v: v.default.drvPath) s' \
+            --json > /dev/null
+
+      - name: Commit and push
+        run: |
+          git config user.name "Chaotic CI"
+          git config user.email "actions@chaotic.cx"
+          git diff --quiet -- flake.lock && echo "No lock changes." && exit 0
+          git add flake.lock
+          git commit -m "chore(flake.lock): Update inputs"
+          git push
