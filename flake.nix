@@ -47,7 +47,8 @@
           inputs.disko.nixosModules.disko
           inputs.impermanence.nixosModules.impermanence
           ./mirror.nix
-          ({ config, pkgs, ... }: {
+          ./monitoring.nix
+          ({ config, pkgs, inputs, ... }: {
             imports = [ ./configuration.nix ];
 
             chaotic.mirror = {
@@ -55,6 +56,10 @@
               fqdn = fqdn;
               email = admin;
             };
+
+            # Expose the flake revision for monitoring (mirror_info metric)
+            system.nixos.revision =
+              inputs.self.shortRev or inputs.self.dirtyShortRev or "unknown";
 
             networking.hostName = hostname;
             system.stateVersion = stateVersion;
@@ -135,19 +140,19 @@
 
       nixosConfigurations = {
         # Big server
-        fortaleza-br = makemirror "25.11" "x86_64-linux" "fortaleza-br.silky.network" "fortaleza-br" "/dev/vda" ./facter/fortaleza-br.json;
+        # fortaleza-br = makemirror "25.11" "x86_64-linux" "fortaleza-br.silky.network" "fortaleza-br" "/dev/vda" ./facter/fortaleza-br.json;
 
         amsterdam-nl = makemirror "25.11" "aarch64-linux" "amsterdam-nl.silky.network" "amsterdam-nl" "/dev/sda" ./facter/amsterdam-nl.json;
 
         apodaca-mx = makemirror "25.11" "aarch64-linux" "apodaca-mx.silky.network" "apodaca-mx" "/dev/sda" ./facter/apodaca-mx.json;
 
-        auckland-nz = makemirror "25.11" "x86_64-linux" "auckland-nz.silky.network" "auckland-nz" "/dev/nvme0n1" ./facter/auckland-nz.json;
+        # auckland-nz = makemirror "25.11" "x86_64-linux" "auckland-nz.silky.network" "auckland-nz" "/dev/nvme0n1" ./facter/auckland-nz.json;
 
-        bangkok-th = makemirror "25.11" "x86_64-linux" "bangkok-th.silky.network" "bangkok-th" "/dev/nvme0n1" ./facter/bangkok-th.json;
+        # bangkok-th = makemirror "25.11" "x86_64-linux" "bangkok-th.silky.network" "bangkok-th" "/dev/nvme0n1" ./facter/bangkok-th.json;
 
-        buenos-aires-ar = makemirror "25.11" "x86_64-linux" "buenos-aires-ar.silky.network" "buenos-aires-ar" "/dev/nvme0n1" ./facter/buenos-aires-ar.json;
+        # buenos-aires-ar = makemirror "25.11" "x86_64-linux" "buenos-aires-ar.silky.network" "buenos-aires-ar" "/dev/nvme0n1" ./facter/buenos-aires-ar.json;
 
-        calgary-ca = makemirror "25.11" "x86_64-linux" "calgary-ca.silky.network" "calgary-ca" "/dev/nvme0n1" ./facter/calgary-ca.json;
+        # calgary-ca = makemirror "25.11" "x86_64-linux" "calgary-ca.silky.network" "calgary-ca" "/dev/nvme0n1" ./facter/calgary-ca.json;
 
         cardiff-gb = makemirror "25.11" "x86_64-linux" "cardiff-gb.silky.network" "cardiff-gb" "/dev/sda" ./facter/cardiff-gb.json;
 
@@ -159,15 +164,15 @@
 
         guarulhos-br = makemirror "25.11" "aarch64-linux" "guarulhos-br.silky.network" "guarulhos-br" "/dev/sda" ./facter/guarulhos-br.json;
 
-        hong-kong-hk = makemirror "25.11" "x86_64-linux" "hong-kong-hk.silky.network" "hong-kong-hk" "/dev/nvme0n1" ./facter/hong-kong-hk.json;
+        # hong-kong-hk = makemirror "25.11" "x86_64-linux" "hong-kong-hk.silky.network" "hong-kong-hk" "/dev/nvme0n1" ./facter/hong-kong-hk.json;
 
-        honolulu-us = makemirror "25.11" "x86_64-linux" "honolulu-us.silky.network" "honolulu-us" "/dev/nvme0n1" ./facter/honolulu-us.json;
+        # honolulu-us = makemirror "25.11" "x86_64-linux" "honolulu-us.silky.network" "honolulu-us" "/dev/nvme0n1" ./facter/honolulu-us.json;
 
         hyderabad-in = makemirror "25.11" "aarch64-linux" "hyderabad-in.silky.network" "hyderabad-in" "/dev/sda" ./facter/hyderabad-in.json;
 
         jeddah-sa = makemirror "25.11" "aarch64-linux" "jeddah-sa.silky.network" "jeddah-sa" "/dev/sda" ./facter/jeddah-sa.json;
 
-        jakarta-id = makemirror "25.11" "x86_64-linux" "jakarta-id.silky.network" "jakarta-id" "/dev/nvme0n1" ./facter/jakarta-id.json;
+        # jakarta-id = makemirror "25.11" "x86_64-linux" "jakarta-id.silky.network" "jakarta-id" "/dev/nvme0n1" ./facter/jakarta-id.json;
 
         jerusalem-il = makemirror "25.11" "aarch64-linux" "jerusalem-il.silky.network" "jerusalem-il" "/dev/sda" ./facter/jerusalem-il.json;
 
@@ -175,11 +180,11 @@
 
         la-canada-mx = makemirror "25.11" "aarch64-linux" "la-canada-mx.silky.network" "la-canada-mx" "/dev/sda" ./facter/la-canada-mx.json;
 
-        lagos-ng = makemirror "25.11" "x86_64-linux" "lagos-ng.silky.network" "lagos-ng" "/dev/nvme0n1" ./facter/lagos-ng.json;
+        # lagos-ng = makemirror "25.11" "x86_64-linux" "lagos-ng.silky.network" "lagos-ng" "/dev/nvme0n1" ./facter/lagos-ng.json;
 
-        las-vegas-us = makemirror "25.11" "x86_64-linux" "las-vegas-us.silky.network" "las-vegas-us" "/dev/nvme0n1" ./facter/las-vegas-us.json;
+        # las-vegas-us = makemirror "25.11" "x86_64-linux" "las-vegas-us.silky.network" "las-vegas-us" "/dev/nvme0n1" ./facter/las-vegas-us.json;
 
-        lima-pe = makemirror "25.11" "x86_64-linux" "lima-pe.silky.network" "lima-pe" "/dev/nvme0n1" ./facter/lima-pe.json;
+        # lima-pe = makemirror "25.11" "x86_64-linux" "lima-pe.silky.network" "lima-pe" "/dev/nvme0n1" ./facter/lima-pe.json;
 
         london-gb = makemirror "25.11" "aarch64-linux" "london-gb.silky.network" "london-gb" "/dev/sda" ./facter/london-gb.json;
 
@@ -191,23 +196,23 @@
 
         melbourne-au = makemirror "25.11" "aarch64-linux" "melbourne-au.silky.network" "melbourne-au" "/dev/sda" ./facter/melbourne-au.json;
 
-        miami-us = makemirror "25.11" "x86_64-linux" "miami-us.silky.network" "miami-us" "/dev/nvme0n1" ./facter/miami-us.json;
+        # miami-us = makemirror "25.11" "x86_64-linux" "miami-us.silky.network" "miami-us" "/dev/nvme0n1" ./facter/miami-us.json;
 
         montreal-ca = makemirror "25.11" "aarch64-linux" "montreal-ca.silky.network" "montreal-ca" "/dev/sda" ./facter/montreal-ca.json;
 
         mumbai-in = makemirror "25.11" "aarch64-linux" "mumbai-in.silky.network" "mumbai-in" "/dev/sda" ./facter/mumbai-in.json;
 
-        new-york-us = makemirror "25.11" "x86_64-linux" "new-york-us.silky.network" "new-york-us" "/dev/nvme0n1" ./facter/new-york-us.json;
+        # new-york-us = makemirror "25.11" "x86_64-linux" "new-york-us.silky.network" "new-york-us" "/dev/nvme0n1" ./facter/new-york-us.json;
 
         osaka-jp = makemirror "25.11" "x86_64-linux" "osaka-jp.silky.network" "osaka-jp" "/dev/sda" ./facter/osaka-jp.json;
 
         paris-fr = makemirror "25.11" "aarch64-linux" "paris-fr.silky.network" "paris-fr" "/dev/sda" ./facter/paris-fr.json;
 
-        perth-au = makemirror "25.11" "x86_64-linux" "perth-au.silky.network" "perth-au" "/dev/nvme0n1" ./facter/perth-au.json;
+        # perth-au = makemirror "25.11" "x86_64-linux" "perth-au.silky.network" "perth-au" "/dev/nvme0n1" ./facter/perth-au.json;
 
         phoenix-us = makemirror "25.11" "aarch64-linux" "phoenix-us.silky.network" "phoenix-us" "/dev/sda" ./facter/phoenix-us.json;
 
-        portland-us = makemirror "25.11" "x86_64-linux" "portland-us.silky.network" "portland-us" "/dev/nvme0n1" ./facter/portland-us.json;
+        # portland-us = makemirror "25.11" "x86_64-linux" "portland-us.silky.network" "portland-us" "/dev/nvme0n1" ./facter/portland-us.json;
 
         san-jose-us = makemirror "25.11" "x86_64-linux" "san-jose-us.silky.network" "san-jose-us" "/dev/sda" ./facter/san-jose-us.json;
 
@@ -217,7 +222,7 @@
 
         seoul-kr = makemirror "25.11" "aarch64-linux" "seoul-kr.silky.network" "seoul-kr" "/dev/sda" ./facter/seoul-kr.json;
 
-        singapore-sg = makemirror "25.11" "x86_64-linux" "singapore-sg.silky.network" "singapore-sg" "/dev/nvme0n1" ./facter/singapore-sg.json;
+        # singapore-sg = makemirror "25.11" "x86_64-linux" "singapore-sg.silky.network" "singapore-sg" "/dev/nvme0n1" ./facter/singapore-sg.json;
 
         siziano-it = makemirror "25.11" "aarch64-linux" "siziano-it.silky.network" "siziano-it" "/dev/sda" ./facter/siziano-it.json;
 
@@ -225,7 +230,7 @@
 
         sydney-au = makemirror "25.11" "aarch64-linux" "sydney-au.silky.network" "sydney-au" "/dev/sda" ./facter/sydney-au.json;
 
-        taipei-tw = makemirror "25.11" "x86_64-linux" "taipei-tw.silky.network" "taipei-tw" "/dev/nvme0n1" ./facter/taipei-tw.json;
+        # taipei-tw = makemirror "25.11" "x86_64-linux" "taipei-tw.silky.network" "taipei-tw" "/dev/nvme0n1" ./facter/taipei-tw.json;
 
         tokyo-jp = makemirror "25.11" "x86_64-linux" "tokyo-jp.silky.network" "tokyo-jp" "/dev/sda" ./facter/tokyo-jp.json;
 
@@ -233,7 +238,7 @@
 
         vinhedo-br = makemirror "25.11" "x86_64-linux" "vinhedo-br.silky.network" "vinhedo-br" "/dev/sda" ./facter/vinhedo-br.json;
 
-        warsaw-pl = makemirror "25.11" "x86_64-linux" "warsaw-pl.silky.network" "warsaw-pl" "/dev/nvme0n1" ./facter/warsaw-pl.json;
+        # warsaw-pl = makemirror "25.11" "x86_64-linux" "warsaw-pl.silky.network" "warsaw-pl" "/dev/nvme0n1" ./facter/warsaw-pl.json;
 
         zurich-ch = makemirror "25.11" "x86_64-linux" "zurich-ch.silky.network" "zurich-ch" "/dev/sda" ./facter/zurich-ch.json;
       };
